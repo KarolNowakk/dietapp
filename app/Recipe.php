@@ -16,41 +16,45 @@ class Recipe extends Model
         return $this->belongsTo(RecipeType::class);
     }
 
-    public function nutritions($recipe)
+    public function getNutritionsAttribute()
     {
         $kcal = 0;
         $proteins = 0;
         $carbs = 0;
         $fats = 0;
-        foreach ($recipe->ingredients as $ingridient) {
-            $kcal = round($kcal + $ingridient->product->kcal*$ingridient->amount/100,0);
-            $proteins = round($proteins + $ingridient->product->proteins*$ingridient->amount/100,0);
-            $carbs = round($carbs + $ingridient->product->carbs*$ingridient->amount/100,0);
-            $fats = round($fats + $ingridient->product->fats*$ingridient->amount/100,0);
+
+        $this->loadMissing('ingredients.product');
+
+        foreach ($this->ingredients as $ingredient) {
+            $kcal += $ingredient->accumulated_kcal;
+            $proteins += $ingredient->accumulated_proteins;
+            $carbs += $ingredient->accumulated_carbs;
+            $fats += $ingredient->accumulated_fats;
         }
+
         return [
-            'kcal' => $kcal,
-            'proteins' => $proteins,
-            'carbs' => $carbs,
-            'fats' => $fats
+            'kcal' => round($kcal, 0),
+            'proteins' => round($proteins, 0),
+            'carbs' => round($carbs, 0),
+            'fats' => round($fats, 0),
         ];
     }
 
-    public function productsInRecipe($recipe)
-    {
-        $productsTable = [];
-        foreach ($recipe->ingredients as $ingridient) {
-            array_push($productsTable,$ingridient->product->name);
-        }
-        return $productsTable;
-    }
 
-    public function productsAmounts($recipe)
+    public function getIngredientsDataAttribute()
     {
-        $productsTable = [];
-        foreach ($recipe->ingredients as $ingridient) {
-            array_push($productsTable,$ingridient->amount);
-        }
-        return $productsTable;
+        $data = collect();
+        $this->loadMissing('ingredients.product');
+        $this->ingredients->each(function (RecipeIngredient $ingredient) use ($data) {
+            /*
+             * TODO: Handle case when product doesn't exist
+             * */
+            $data->push([
+                'amount' => $ingredient->amount,
+                'name' => $ingredient->product->name,
+            ]);
+        });
+
+        return $data->toArray();
     }
 }

@@ -26,13 +26,8 @@ class Recipe extends JsonResource
             'name' => $this->name,
             'spices' => $this->spices,
             'steps' => $this->steps,
-            'nutritions' => [
-                $this->resource->nutritions($this->resource)
-            ],
-            'ingredients' =>[
-                'products' => $this->resource->productsInRecipe($this->resource),
-                'amounts' => $this->resource->productsAmounts($this->resource)
-            ]
+            'nutritions' => $this->nutritions,
+            'ingredients' => $this->ingredients_data,
         ];
     }
 }
