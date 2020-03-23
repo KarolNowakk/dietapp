@@ -20,15 +20,15 @@ class CreateMealsTable extends Migration
             $table->bigInteger('recipe_id')->unsigned();
             $table->foreign('recipe_id')->references('id')->on('recipes');
             $table->date('meal_date');
-            $table->integer('meal_number');
+            $table->unsignedTinyInteger('meal_number');
             $table->time('meal_hour');
             $table->float('factor');
-            $table->integer('proteins');
-            $table->integer('carbs');
-            $table->integer('fats');
-            $table->integer('saturated_fats');
-            $table->integer('polysaturated_fats');
-            $table->integer('monosaturated_fats');
+            $table->unsignedSmallInteger('proteins');
+            $table->unsignedSmallInteger('carbs');
+            $table->unsignedSmallInteger('fats');
+            $table->unsignedSmallInteger('saturated_fats');
+            $table->unsignedSmallInteger('polysaturated_fats');
+            $table->unsignedSmallInteger('monosaturated_fats');
             $table->timestamps();
         });
     }

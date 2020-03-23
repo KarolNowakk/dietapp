@@ -16,13 +16,13 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('kcal');
-            $table->integer('proteins');
-            $table->integer('carbs');
-            $table->integer('fats');
-            $table->integer('saturated_fats');
-            $table->integer('polysaturated_fats');
-            $table->integer('monosaturated_fats');
+            $table->unsignedSmallInteger('kcal');
+            $table->unsignedSmallInteger('proteins');
+            $table->unsignedSmallInteger('carbs');
+            $table->unsignedSmallInteger('fats');
+            $table->unsignedSmallInteger('saturated_fats');
+            $table->unsignedSmallInteger('polysaturated_fats');
+            $table->unsignedSmallInteger('monosaturated_fats');
             $table->boolean('is_private')->default(false);
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->nullable();
