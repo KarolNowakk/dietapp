@@ -20,7 +20,7 @@ class CreateChangedIngInMealsTable extends Migration
             $table->bigInteger('product_id')->unsigned();
             $table->foreign('product_id')->references('id')->on('products');
             $table->bigInteger('ingridient_id')->unsigned();
-            $table->foreign('ingridient_id')->references('id')->on('recipe_ingridients');
+            $table->foreign('ingridient_id')->references('id')->on('recipe_ingredients');
             $table->integer('amount');
             $table->timestamps();
         });

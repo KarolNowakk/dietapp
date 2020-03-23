@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Recipe extends Model
 {
-    public function ingridients()
+    public function ingredients()
     {
-        return $this->hasMany(RecipeIngridient::class);
+        return $this->hasMany(RecipeIngredient::class);
     }
 
     public function nutritions($recipe)
@@ -17,7 +17,7 @@ class Recipe extends Model
         $proteins = 0;
         $carbs = 0;
         $fats = 0;
-        foreach ($recipe->ingridients as $ingridient) {
+        foreach ($recipe->ingredients as $ingridient) {
             $kcal = round($kcal + $ingridient->product->kcal*$ingridient->amount/100,0);
             $proteins = round($proteins + $ingridient->product->proteins*$ingridient->amount/100,0);
             $carbs = round($carbs + $ingridient->product->carbs*$ingridient->amount/100,0);
@@ -34,7 +34,7 @@ class Recipe extends Model
     public function productsInRecipe($recipe)
     {
         $productsTable = [];
-        foreach ($recipe->ingridients as $ingridient) {
+        foreach ($recipe->ingredients as $ingridient) {
             array_push($productsTable,$ingridient->product->name);
         }
         return $productsTable;
@@ -43,7 +43,7 @@ class Recipe extends Model
     public function productsAmounts($recipe)
     {
         $productsTable = [];
-        foreach ($recipe->ingridients as $ingridient) {
+        foreach ($recipe->ingredients as $ingridient) {
             array_push($productsTable,$ingridient->amount);
         }
         return $productsTable;

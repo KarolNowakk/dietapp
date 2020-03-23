@@ -29,7 +29,7 @@ class Recipe extends JsonResource
             'nutritions' => [
                 $this->resource->nutritions($this->resource)
             ],
-            'ingridients' =>[
+            'ingredients' =>[
                 'products' => $this->resource->productsInRecipe($this->resource),
                 'amounts' => $this->resource->productsAmounts($this->resource)
             ]

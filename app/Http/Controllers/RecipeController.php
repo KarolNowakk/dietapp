@@ -19,7 +19,7 @@ class RecipeController extends Controller
     {
         $recipe = Recipe::findOrFail($id);
         RecipeResource::withoutWrapping();
-        //return $recipe->ingridients;
+        //return $recipe->ingredients;
         return new RecipeResource($recipe);
     }
 }

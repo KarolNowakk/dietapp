@@ -5,7 +5,7 @@
 use App\Model;
 use Faker\Generator as Faker;
 
-$factory->define(App\RecipeIngridient::class, function (Faker $faker) {
+$factory->define(App\RecipeIngredient::class, function (Faker $faker) {
     return [
         'recipe_id'=>random_int(1,30),
         'product_id'=>random_int(1,100),
