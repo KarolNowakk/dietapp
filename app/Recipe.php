@@ -11,6 +11,11 @@ class Recipe extends Model
         return $this->hasMany(RecipeIngredient::class);
     }
 
+    public function type()
+    {
+        return $this->belongsTo(RecipeType::class);
+    }
+
     public function nutritions($recipe)
     {
         $kcal = 0;

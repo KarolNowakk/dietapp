@@ -22,7 +22,7 @@ class Recipe extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => RecipeType::findOrFail($this->type_id)->name,
+            'type' => $this->type,
             'name' => $this->name,
             'spices' => $this->spices,
             'steps' => $this->steps,
