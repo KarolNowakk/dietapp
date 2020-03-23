@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Resources\Recipe as RecipeResource;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        RecipeResource::withoutWrapping();
+        /*
+         * or you can disable every JsonResource wrapping if you want
+         * */
     }
 }

@@ -11,15 +11,11 @@ class RecipeController extends Controller
     public function index()
     {
         $recipes = Recipe::paginate(8);
-        RecipeResource::withoutWrapping();
         return RecipeResource::collection($recipes);
     }
 
     public function show(Recipe $recipe)
     {
-        $recipe = Recipe::findOrFail($id);
-        RecipeResource::withoutWrapping();
-        //return $recipe->ingredients;
         return new RecipeResource($recipe);
     }
 }
