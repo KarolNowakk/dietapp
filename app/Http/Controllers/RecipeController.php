@@ -15,7 +15,7 @@ class RecipeController extends Controller
         return RecipeResource::collection($recipes);
     }
 
-    public function show($id)
+    public function show(Recipe $recipe)
     {
         $recipe = Recipe::findOrFail($id);
         RecipeResource::withoutWrapping();

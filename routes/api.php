@@ -29,4 +29,4 @@ Route::match(['post', 'put'], '/product/{product?}', 'ProductController@store');
 Route::delete('product/{product}', 'ProductController@destroy');
 
 Route::get('recipes', 'RecipeController@index');
-Route::get('recipe/{id}', 'RecipeController@show');
+Route::get('recipe/{recipe}', 'RecipeController@show');
