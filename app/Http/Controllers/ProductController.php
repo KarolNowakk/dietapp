@@ -23,27 +23,35 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param null $product
+     * @return ProductResource
      */
-    public function store(Request $request)
+    public function store(Request $request, $product = null)
     {
-        $product = $request->isMethod('put') ? Product::findOrFail
-        ($request->product_id) : new Product;
+        /* TODO: validate everything */
+        $data = $request->validate([
+            'name' => '',
+            'proteins' => '',
+            'carbs' => '',
+            'fats' => '',
+            'saturated_fats' => '',
+            'polysaturated_fats' => '',
+            'monosaturated_fats' => '',
+            'is_private' => '',
+            'user_id' => '',
+        ]);
 
-        $product->id = $request->input('product_id');
-        $product->name = $request->input('name');
-        $product->proteins = $request->input('proteins');
-        $product->carbs = $request->input('carbs');
-        $product->fats = $request->input('fats');
-        $product->saturated_fats = $request->input('saturated_fats');
-        $product->polysaturated_fats = $request->input('polysaturated_fats');
-        $product->monosaturated_fats = $request->input('monosaturated_fats');
-        $product->is_private = $request->input('is_private');
-        $product->user_id = $request->input('user_id');
+        /*
+         * TODO: Set user_id from auth not from request
+         * $data['user_id'] = Auth::user();
+         * */
 
-        if($product->save()){
-            return new ProductResource($product);
+        $prod = Product::updateOrCreate(['id' => $product], $data);
+
+
+        if ($prod) {
+            return new ProductResource($prod);
         }
     }
 
@@ -67,7 +75,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        if($product->delete()){
+        if ($product->delete()) {
             return new ProductResource($product);
         }
     }

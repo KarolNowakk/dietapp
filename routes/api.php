@@ -25,8 +25,7 @@ Route::post('/register','AuthController@register');
 
 Route::get('products', 'ProductController@index');
 Route::get('product/{product}', 'ProductController@show');
-Route::post('product', 'ProductController@store');
-Route::put('product', 'ProductController@store');
+Route::match(['post', 'put'], '/product/{product?}', 'ProductController@store');
 Route::delete('product/{product}', 'ProductController@destroy');
 
 Route::get('recipes', 'RecipeController@index');
