@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\RecipeType;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Recipe extends JsonResource
@@ -22,7 +21,7 @@ class Recipe extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => $this->type,
+            'type' => $this->type->name,
             'name' => $this->name,
             'spices' => $this->spices,
             'steps' => $this->steps,

@@ -14,12 +14,22 @@ class CreateNotWantedSubstancesTable extends Migration
     public function up()
     {
         Schema::create('not_wanted_substances', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->bigInteger('substance_id')->unsigned();
-            $table->foreign('substance_id')->references('id')->on('substances');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('substance_id');
             $table->timestamps();
+
+            $table->foreign('substance_id')
+                ->references('id')
+                ->on('substances')
+                ->onDelete('cascade');
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
+
+            $table->primary(['substance_id', 'user_id']);
+
         });
     }
 

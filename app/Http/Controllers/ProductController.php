@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
-//use App\Http\Request;
 use App\Http\Resources\Product as ProductResource;
+use Illuminate\Support\Facades\Auth;
+
 
 class ProductController extends Controller
 {
@@ -29,26 +30,23 @@ class ProductController extends Controller
      */
     public function store(Request $request, $product = null)
     {
-        /* TODO: validate everything */
         $data = $request->validate([
-            'name' => '',
-            'proteins' => '',
-            'carbs' => '',
-            'fats' => '',
-            'saturated_fats' => '',
-            'polysaturated_fats' => '',
-            'monosaturated_fats' => '',
-            'is_private' => '',
-            'user_id' => '',
+            'name' => ['string', 'max:255', 'required'],
+            'kcal' => ['numeric', 'between:0,1000', 'required'],
+            'proteins' => ['numeric', 'between:0,100', 'required'],
+            'carbs' => ['numeric', 'between:0,100', 'required'],
+            'fats' => ['numeric', 'between:0,100', 'required'],
+            'saturated_fats' => ['numeric', 'between:0,100', 'required'],
+            'polysaturated_fats' => ['numeric', 'between:0,100', 'required'],
+            'monosaturated_fats' => ['numeric', 'between:0,100', 'required'],
+            'is_private' => ['boolean']
         ]);
 
-        /*
-         * TODO: Set user_id from auth not from request
-         * $data['user_id'] = Auth::user();
-         * */
+        if($data['is_private']){
+            $data['user_id'] = Auth::id();
+        }
 
         $prod = Product::updateOrCreate(['id' => $product], $data);
-
 
         if ($prod) {
             return new ProductResource($prod);

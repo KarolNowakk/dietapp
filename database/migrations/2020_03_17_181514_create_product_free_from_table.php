@@ -14,12 +14,22 @@ class CreateProductFreeFromTable extends Migration
     public function up()
     {
         Schema::create('product_free_from', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('product_id')->unsigned();
-            $table->foreign('product_id')->references('id')->on('products');
-            $table->bigInteger('substance_id')->unsigned();
-            $table->foreign('substance_id')->references('id')->on('substances');
+            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('substance_id');
             $table->timestamps();
+
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->onDelete('cascade');
+
+            $table->foreign('substance_id')
+                ->references('id')
+                ->on('substances')
+                ->onDelete('cascade');
+
+            $table->primary(['substance_id', 'product_id']);
+
         });
     }
 

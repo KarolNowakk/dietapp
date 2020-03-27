@@ -18,12 +18,20 @@ class CreateRecipesTable extends Migration
             $table->string('name');
             $table->text('spices')->nullable();
             $table->text('steps')->nullable();
-            $table->bigInteger('type_id')->unsigned()->nullable();
-            $table->foreign('type_id')->references('id')->on('recipe_types')->nullable();
+            $table->unsignedBigInteger('type_id')->nullable();
             $table->boolean('is_private')->default(false);
-            $table->bigInteger('user_id')->unsigned()->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->nullable();
+
+            $table->foreign('type_id')
+                ->references('id')
+                ->on('recipe_types')
+                ->nullable();
         });
     }
 

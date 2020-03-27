@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNotWantedRecipesTable extends Migration
+class CreateProductMealTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,23 +13,23 @@ class CreateNotWantedRecipesTable extends Migration
      */
     public function up()
     {
-        Schema::create('not_wanted_recipes', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('recipe_id');
+        Schema::create('product_meal', function (Blueprint $table) {
+            $table->unsignedBigInteger('meal_id');
+            $table->unsignedBigInteger('product_id');
+            $table->integer('amount');
             $table->timestamps();
 
-            $table->foreign('user_id')
+            $table->foreign('meal_id')
                 ->references('id')
-                ->on('users')
+                ->on('meals')
                 ->onDelete('cascade');
 
-            $table->foreign('recipe_id')
+            $table->foreign('product_id')
                 ->references('id')
-                ->on('recipes')
+                ->on('products')
                 ->onDelete('cascade');
 
-            $table->primary(['recipe_id', 'user_id']);
-
+            $table->primary(['meal_id', 'product_id']);
         });
     }
 
@@ -40,6 +40,6 @@ class CreateNotWantedRecipesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('not_wanted_recipes');
+        Schema::dropIfExists('product_meal');
     }
 }

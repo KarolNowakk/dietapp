@@ -25,8 +25,12 @@ class CreateProductsTable extends Migration
             $table->unsignedSmallInteger('monosaturated_fats');
             $table->boolean('is_private')->default(false);
             $table->bigInteger('user_id')->unsigned()->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->nullable();
         });
     }
 

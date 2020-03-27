@@ -14,12 +14,21 @@ class CreateRecipeFreeFromTable extends Migration
     public function up()
     {
         Schema::create('recipe_free_from', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('recipe_id')->unsigned();
-            $table->foreign('recipe_id')->references('id')->on('recipes');
-            $table->bigInteger('substance_id')->unsigned();
-            $table->foreign('substance_id')->references('id')->on('substances');
-            $table->timestamps();
+            $table->unsignedBigInteger('recipe_id');
+            $table->unsignedBigInteger('substance_id');
+
+            $table->foreign('recipe_id')
+                ->references('id')
+                ->on('recipes')
+                ->onDelete('cascade');
+
+            $table->foreign('substance_id')
+                ->references('id')
+                ->on('substances')
+                ->onDelete('cascade');
+
+            $table->primary(['recipe_id', 'substance_id']);
+
         });
     }
 

@@ -23,10 +23,20 @@ Route::post('/login','AuthController@login');
 Route::middleware('auth:api')->post('/logout','AuthController@logout');
 Route::post('/register','AuthController@register');
 
-Route::get('products', 'ProductController@index');
-Route::get('product/{product}', 'ProductController@show');
-Route::match(['post', 'put'], '/product/{product?}', 'ProductController@store');
-Route::delete('product/{product}', 'ProductController@destroy');
+Route::group(['middleware' => ['auth:api']],function(){
+    Route::get('/products', 'ProductController@index');
+    Route::get('/product/{product}', 'ProductController@show');
+    Route::match(['post', 'put'], '/product/{product?}', 'ProductController@store');
+    Route::delete('/product/{product}', 'ProductController@destroy');
 
-Route::get('recipes', 'RecipeController@index');
-Route::get('recipe/{recipe}', 'RecipeController@show');
+    Route::get('/recipes', 'RecipeController@index');
+
+    Route::match(['post', 'put'], '/recipe/{recipe?}', 'RecipeController@store');
+    Route::delete('/recipe/{recipe}', 'RecipeController@destroy');
+
+    Route::match(['post', 'put'], '/user', 'UserController@store');
+    Route::get('/user', 'UserController@show');
+});
+
+Route::get('/recipe/{recipe}', 'RecipeController@show');
+

@@ -15,8 +15,7 @@ class DatabaseSeeder extends Seeder
             ProductsTableSeeder::class,
             RecipeTypesTableSeeder::class,
             RecipesTableSeeder::class,
-            IngTypesTableSeeder::class,
-            RecipeIngredientsTableSeeder::class
+            UsersTableSeeder::class
         ]);
     }
 }

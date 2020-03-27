@@ -14,16 +14,20 @@ class CreateUserSettingsTable extends Migration
     public function up()
     {
         Schema::create('user_settings', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
             $table->id();
-            $table->bigInteger('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->integer('required_kcal')->nullable();
-            $table->integer('required_proteins')->nullable();
-            $table->integer('required_carbs')->nullable();
-            $table->integer('required_fats')->nullable();
-            $table->integer('meals_per_day');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedSmallInteger('required_kcal');
+            $table->unsignedSmallInteger('required_proteins');
+            $table->unsignedSmallInteger('required_carbs');
+            $table->unsignedSmallInteger('required_fats');
+            $table->unsignedSmallInteger('meals_per_day');
+            $table->unsignedTinyInteger('factor');
             $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 

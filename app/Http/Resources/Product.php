@@ -23,7 +23,7 @@ class Product extends JsonResource
             'fats' => $this->fats,
             'saturated_fats' => $this->saturated_fats,
             'polysaturated_fats' => $this->polysaturated_fats,
-            'monosaturated_fats' => $this->monosaturated_fats
+            'monosaturated_fats' => $this->monosaturated_fats,
         ];
     }
 }

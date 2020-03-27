@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Recipe extends Model
 {
+    protected $fillable = ['id', 'name', 'spices', 'steps', 'type_id', 'is_private', 'user_id'];
+
     public function ingredients()
     {
-        return $this->hasMany(RecipeIngredient::class);
+        return $this->belongsToMany(Product::class)->withPivot('amount');
     }
 
     public function type()
@@ -23,13 +25,11 @@ class Recipe extends Model
         $carbs = 0;
         $fats = 0;
 
-        $this->loadMissing('ingredients.product');
-
         foreach ($this->ingredients as $ingredient) {
-            $kcal += $ingredient->accumulated_kcal;
-            $proteins += $ingredient->accumulated_proteins;
-            $carbs += $ingredient->accumulated_carbs;
-            $fats += $ingredient->accumulated_fats;
+            $kcal += $ingredient->kcal * $ingredient->pivot->amount / 100;
+            $proteins += $ingredient->proteins * $ingredient->pivot->amount / 100;
+            $carbs += $ingredient->carbs * $ingredient->pivot->amount / 100;
+            $fats += $ingredient->fats * $ingredient->pivot->amount / 100;
         }
 
         return [
@@ -40,21 +40,21 @@ class Recipe extends Model
         ];
     }
 
-
     public function getIngredientsDataAttribute()
     {
         $data = collect();
-        $this->loadMissing('ingredients.product');
-        $this->ingredients->each(function (RecipeIngredient $ingredient) use ($data) {
+
+        $this->ingredients->each(function ($ingredient) use ($data) {
             /*
              * TODO: Handle case when product doesn't exist
              * */
             $data->push([
-                'amount' => $ingredient->amount,
-                'name' => $ingredient->product->name,
+                'amount' => $ingredient->pivot->amount * 100,
+                'name' => $ingredient->name,
             ]);
         });
 
         return $data->toArray();
     }
+
 }
