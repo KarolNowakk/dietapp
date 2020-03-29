@@ -2,13 +2,13 @@
 
 namespace App\Exceptions;
 
-use App\Exceptions\NotFoundExceptionTrait;
+use App\Exceptions\ExceptionTrait;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
-    use NotFoundExceptionTrait;
+    use ExceptionTrait;
     /**
      * A list of the exception types that are not reported.
      *

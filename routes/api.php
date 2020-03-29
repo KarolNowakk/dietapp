@@ -33,10 +33,15 @@ Route::group(['middleware' => ['auth:api']],function(){
 
     Route::match(['post', 'put'], '/recipe/{recipe?}', 'RecipeController@store');
     Route::delete('/recipe/{recipe}', 'RecipeController@destroy');
+    Route::get('/recipe/{recipe}', 'RecipeController@show');
 
     Route::match(['post', 'put'], '/user', 'UserController@store');
     Route::get('/user', 'UserController@show');
+    Route::get('/user/generate', 'UserController@generate');
+
+    Route::get('/meals/{date}', 'MealController@index');
+    Route::get('/meal/{date}', 'MealController@show');
 });
 
-Route::get('/recipe/{recipe}', 'RecipeController@show');
+
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\DietService;
 use App\UserSettings;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -12,7 +13,6 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-
      * @return json
      */
     public function show()
@@ -29,11 +29,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        /**
-         * TODO: Add countBy BTW or kcal in migrations
-         */
         $data = $request->validate([
-            'count_by' => ['string','in:macro,kcal', 'required'],
             'required_kcal' => ['numeric', 'between:1000,10000', Rule::requiredIf(function () use ($request){
                 return !$request->required_proteins AND !$request->required_carbs AND !$request->required_fats;
             })],
@@ -47,14 +43,20 @@ class UserController extends Controller
                 return !$request->required_kcal;
             })],
             'meals_per_day' => ['numeric', 'between:2,8', 'required'],
+            'count_by' => ['string','in:macro,kcal', 'required'],
         ]);
 
         $data['user_id'] = Auth::id();
-
-        $settings = UserSettings::updateOrCreate($data);
+        $settings = UserSettings::getDayDateOfMeal($data);
 
         if ($settings) {
             return response()->json($settings, 200);
         }
+    }
+
+    public function generate()
+    {
+        $diet = new DietService;
+        return $diet->generateOneDay();
     }
 }

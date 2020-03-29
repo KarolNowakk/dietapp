@@ -14,4 +14,5 @@ class UserSettings extends Model
         'required_fats',
         'meals_per_day'
     ];
+
 }

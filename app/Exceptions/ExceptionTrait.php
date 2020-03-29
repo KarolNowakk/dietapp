@@ -5,9 +5,10 @@ namespace App\Exceptions;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Exception;
+use Illuminate\Database\QueryException;
 use Symfony\Component\HttpFoundation\Response;
 
-trait NotFoundExceptionTrait
+trait ExceptionTrait
 {
     public function apiException($exception,$request)
     {
@@ -18,8 +19,12 @@ trait NotFoundExceptionTrait
         if ($this->isHttp($exception)) {
             return $this->httpResponse();
         }
+
+        // if ($this->isDbQuery($exception)){
+        //     return $this->dbQueryResponse();
+        // }
+
         return parent::render($request, $exception);
-        //return $this->otherResponse($exception);
     }
 
     protected function modelResponse($exception)
@@ -39,6 +44,13 @@ trait NotFoundExceptionTrait
         ],Response::HTTP_NOT_FOUND);
     }
 
+    protected function dbQueryResponse()
+    {
+        return response()->json([
+            'errors' => 'Unable to write into database.',
+        ],Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
     protected function otherResponse($exception)
     {
         return response()->json($exception);
@@ -52,6 +64,11 @@ trait NotFoundExceptionTrait
     protected function isHttp($exception)
     {
         return $exception instanceOf NotFoundHttpException;
+    }
+
+    protected function isDbQuery($exception)
+    {
+        return $exception instanceOf QueryException;
     }
 
 }

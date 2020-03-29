@@ -2,12 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9cf20ffa-8fec-441f-b03e-62dec003edb7" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/RecipeIngredientsController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeds/UsersTableSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ProductController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ProductController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/RecipeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/RecipeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Resources/Product.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/Product.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Exceptions/Handler.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Exceptions/Handler.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Exceptions/NotFoundExceptionTrait.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Resources/Recipe.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/Recipe.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/IngType.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Recipe.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Recipe.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/UserSettings.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/UserSettings.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_03_17_181814_create_user_settings_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_03_17_181814_create_user_settings_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeds/UsersTableSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/UsersTableSeeder.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -171,6 +175,8 @@
       <workItem from="1584784226280" duration="5764000" />
       <workItem from="1584869898565" duration="2332000" />
       <workItem from="1585167640908" duration="35000" />
+      <workItem from="1585482243144" duration="6207000" />
+      <workItem from="1585503998288" duration="651000" />
     </task>
     <servers />
   </component>
@@ -186,9 +192,9 @@
       <screen x="1360" y="-568" width="1920" height="1040" />
     </state>
     <state width="498" height="446" key="SwitcherDM/0.0.1360.728/1360.-568.1920.1040@1360.-568.1920.1040" timestamp="1584784338220" />
-    <state x="2016" y="-224" key="com.intellij.ide.util.TipDialog" timestamp="1585167648901">
+    <state x="2016" y="-224" key="com.intellij.ide.util.TipDialog" timestamp="1585504062969">
       <screen x="1360" y="-568" width="1920" height="1040" />
     </state>
-    <state x="2016" y="-224" key="com.intellij.ide.util.TipDialog/0.0.1360.728/1360.-568.1920.1040@1360.-568.1920.1040" timestamp="1585167648901" />
+    <state x="2016" y="-224" key="com.intellij.ide.util.TipDialog/0.0.1360.728/1360.-568.1920.1040@1360.-568.1920.1040" timestamp="1585504062969" />
   </component>
 </project>

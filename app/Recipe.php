@@ -18,6 +18,11 @@ class Recipe extends Model
         return $this->belongsTo(RecipeType::class);
     }
 
+    public function recipe()
+    {
+        return $this->hasOne(Meal::class);
+    }
+
     public function getNutritionsAttribute()
     {
         $kcal = 0;
@@ -26,18 +31,18 @@ class Recipe extends Model
         $fats = 0;
 
         foreach ($this->ingredients as $ingredient) {
-            $kcal += $ingredient->kcal * $ingredient->pivot->amount / 100;
-            $proteins += $ingredient->proteins * $ingredient->pivot->amount / 100;
-            $carbs += $ingredient->carbs * $ingredient->pivot->amount / 100;
-            $fats += $ingredient->fats * $ingredient->pivot->amount / 100;
+            $kcal += $ingredient->kcal * $ingredient->pivot->amount / 10;
+            $proteins += $ingredient->proteins * $ingredient->pivot->amount / 10;
+            $carbs += $ingredient->carbs * $ingredient->pivot->amount / 10;
+            $fats += $ingredient->fats * $ingredient->pivot->amount / 10;
         }
 
-        return [
+        return collect([
             'kcal' => round($kcal, 0),
             'proteins' => round($proteins, 0),
             'carbs' => round($carbs, 0),
             'fats' => round($fats, 0),
-        ];
+        ]);
     }
 
     public function getIngredientsDataAttribute()
@@ -49,7 +54,7 @@ class Recipe extends Model
              * TODO: Handle case when product doesn't exist
              * */
             $data->push([
-                'amount' => $ingredient->pivot->amount * 100,
+                'amount' => round($ingredient->pivot->amount * 10,1),
                 'name' => $ingredient->name,
             ]);
         });
