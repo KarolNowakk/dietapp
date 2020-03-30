@@ -12,7 +12,10 @@ class UserSettings extends Model
         'required_proteins',
         'required_carbs',
         'required_fats',
-        'meals_per_day'
+        'meals_per_day',
+        'count_by',
+        'start',
+        'end',
     ];
 
 }

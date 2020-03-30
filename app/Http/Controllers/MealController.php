@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Meal;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\Meal as MealResource;
+use App\Exceptions\MealNotFoundException;
 
 class MealController extends Controller
 {
@@ -18,7 +19,12 @@ class MealController extends Controller
     public function index($date)
     {
         $meals = Meal::where('user_id', Auth::id())->where('meal_date', $date)->get();
-        return MealResource::collection($meals);
+        //return gettype($meals);
+        if (blank($meals)) {
+            throw new MealNotFoundException("Meals with passed date not found.");
+        } else {
+            return MealResource::collection($meals);
+        }
     }
 
     /**
@@ -30,6 +36,11 @@ class MealController extends Controller
     public function show($date)
     {
         $meal = Meal::where('user_id', Auth::id())->where('meal_date', $date)->first();
-        return new MealResource($meal);
+        if ($meal) {
+            return new MealResource($meal);
+        } else {
+            throw new MealNotFoundException("Meal with passed date not found.", 1);
+        }
+
     }
 }

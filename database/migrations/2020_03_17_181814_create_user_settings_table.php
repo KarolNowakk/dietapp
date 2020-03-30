@@ -22,6 +22,8 @@ class CreateUserSettingsTable extends Migration
             $table->unsignedSmallInteger('required_fats');
             $table->unsignedSmallInteger('meals_per_day');
             $table->string('count_by')->nullable();
+            $table->time('start');
+            $table->time('end');
             $table->timestamps();
 
             $table->foreign('user_id')

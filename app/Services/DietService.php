@@ -9,14 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 class DietService
 {
-    public function generate()
+    public function generateDays($days)
     {
-        $recipe = DietHelperService::getRandomNonPrivateRecipe();
-
-        return [
-            //'recipe' => $recipe,
-            DietHelperService::getDayDateOfMeal(),
-        ];
+        $createdDietDays = [];
+        for ($i=0; $i < $days; $i++) {
+            array_push($createdDietDays,$this->generateOneDay());
+        }
+        return $createdDietDays;
     }
 
     public function generateOneDay()

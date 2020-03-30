@@ -42,6 +42,7 @@ class CreateMealsTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints('meals');
         Schema::dropIfExists('meals');
     }
 }

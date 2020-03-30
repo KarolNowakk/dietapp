@@ -44,19 +44,33 @@ class UserController extends Controller
             })],
             'meals_per_day' => ['numeric', 'between:2,8', 'required'],
             'count_by' => ['string','in:macro,kcal', 'required'],
+            'start' => ['date_format:H:i', 'before:end', 'required'],
+            'end' => ['date_format:H:i', 'required'],
         ]);
 
         $data['user_id'] = Auth::id();
-        $settings = UserSettings::getDayDateOfMeal($data);
+
+        $existingSettings = UserSettings::where('user_id', $data['user_id'])->first();
+
+        if ($existingSettings) {
+            $existingSettings = $existingSettings['id'];
+        }
+        $settings = UserSettings::updateOrCreate(['id' => $existingSettings], $data);
 
         if ($settings) {
             return response()->json($settings, 200);
         }
     }
 
-    public function generate()
+    public function generate(Request $request)
     {
+        $data = $request->validate([
+            'generateDays' => ['numeric', 'between:1,14','required'],
+        ]);
         $diet = new DietService;
-        return $diet->generateOneDay();
+        $newDiet = $diet->generateDays($data['generateDays']);
+        if ($newDiet){
+            return $newDiet;
+        }
     }
 }

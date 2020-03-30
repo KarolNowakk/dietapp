@@ -24,6 +24,10 @@ trait ExceptionTrait
         //     return $this->dbQueryResponse();
         // }
 
+        if ($this->isMeal($exception)) {
+            return $this->mealResponse($exception);
+        }
+
         return parent::render($request, $exception);
     }
 
@@ -51,6 +55,13 @@ trait ExceptionTrait
         ],Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
+    protected function mealResponse($exception)
+    {
+        return response()->json([
+            'errors' => $exception->message,
+        ],Response::HTTP_NOT_FOUND);
+    }
+
     protected function otherResponse($exception)
     {
         return response()->json($exception);
@@ -69,6 +80,11 @@ trait ExceptionTrait
     protected function isDbQuery($exception)
     {
         return $exception instanceOf QueryException;
+    }
+
+    protected function isMeal($exception)
+    {
+        return $exception instanceOf MealNotFoundException;
     }
 
 }
