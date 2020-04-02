@@ -9,12 +9,13 @@ $factory->define(App\Product::class, function (Faker $faker) {
     return [
         'name'=> $faker->word(),
         'kcal' => random_int(70,400),
-        'proteins'=> random_int(1,27),
-        'carbs'=> random_int(1,27),
-        'fats'=> random_int(1,27),
-        'saturated_fats'=> random_int(1,6),
-        'polysaturated_fats'=> random_int(1,10),
-        'monosaturated_fats'=> random_int(1,4),
-        'is_private'=>false
+        'proteins'=> mt_rand(1,2700) / 100,
+        'carbs'=> mt_rand(1,2700) / 100,
+        'fats'=> mt_rand(1,2700) / 100,
+        'saturated_fats'=> mt_rand(1,700) / 100,
+        'polysaturated_fats'=> mt_rand(1,700) / 100,
+        'monosaturated_fats'=> mt_rand(1,700) / 100,
+        'is_private'=> false,
+        'user_id' => 1,
     ];
 });

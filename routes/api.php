@@ -23,9 +23,10 @@ Route::post('/login','AuthController@login');
 Route::middleware('auth:api')->post('/logout','AuthController@logout');
 Route::post('/register','AuthController@register');
 
+
 Route::group(['middleware' => ['auth:api']],function(){
     Route::get('/products', 'ProductController@index');
-    Route::get('/product/{product}', 'ProductController@show');
+
     Route::match(['post', 'put'], '/product/{product?}', 'ProductController@store');
     Route::delete('/product/{product}', 'ProductController@destroy');
 
@@ -43,5 +44,5 @@ Route::group(['middleware' => ['auth:api']],function(){
     Route::get('/meal/{date}', 'MealController@show');
 });
 
-
+Route::get('/product/{product}', 'ProductController@show');
 
