@@ -50,16 +50,13 @@ class Recipe extends Model
         $data = collect();
 
         $this->ingredients->each(function ($ingredient) use ($data) {
-            /*
-             * TODO: Handle case when product doesn't exist
-             * */
+            // TODO: Handle case when product doesn't exist
             $data->push([
-                'amount' => round($ingredient->pivot->amount * 10,1),
+                'amount' => round($ingredient->pivot->amount * 10, 1),
                 'name' => $ingredient->name,
             ]);
         });
 
         return $data->toArray();
     }
-
 }

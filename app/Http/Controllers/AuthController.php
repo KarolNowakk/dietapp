@@ -84,52 +84,64 @@ class AuthController extends Controller
      */
     public function handleGithubCallback()
     {
-        $user = Socialite::driver('github')->user();
+        $socialiteUser = Socialite::driver('github')->user();
+        $providedToken = $socialiteUser->token;
 
-        // $acces_token = $user->token;
 
-        // $user = User::firstOrCreate([
-        //     'email' => $user->email,
-        // ], [
-        //     'name' => $user->nickname,
-        //     'password' => Hash::create(Str::random(24)),
-        //     'email_verified_at' => now(),
-        //     'remember_token' => Str::random(12),
-        // ]);
-
-        // $this->getAccesToken('github', $acces_token);
+        $user = User::firstOrCreate([
+            'email' => $socialiteUser->email,
+        ], [
+            'name' => $socialiteUser->nickname,
+            'password' => Hash::make(Str::random(24)),
+            'email_verified_at' => now(),
+            'remember_token' => Str::random(12),
+        ]);
+        return $this->getAccesToken('github', $providedToken, $user->email);
     }
 
-    // public function getAccesToken($providerName, $providerAccessToken)
-    // {
-    //     $http = new Client;
+    protected function getAccesToken($providerName, $providerAccessToken, $username)
+    {
+        //return $providerAccessToken;
+        $http = new Client;
+        try {
+            $response = $http->post(config('services.passport.login_endpoint'), [
+                'form_params' => [
+                    'grant_type' => 'social',
+                    'client_id' => config('services.passport.client_id'),
+                    'client_secret' => config('services.passport.client_secret'),
+                    'provider' => $providerName,
+                    'access_token' => $providerAccessToken,
+                    'username' => $username,
+                ],
+            ]);
 
-    //     $response = $http->post('services.passport.login_endpoint', [
-    //         RequestOptions::FORM_PARAMS => [
-    //             'grant_type' => 'social', // static 'social' value
-    //             'client_id' => config('services.passport.client_id'), // client id
-    //             'client_secret' => config('services.passport.client_secret'), // client secret
-    //             'provider' => $providerName, // name of provider (e.g., 'facebook', 'google' etc.)
-    //             'access_token' => $providerAccessToken, // access token issued by specified provider
-    //         ],
-    //         RequestOptions::HTTP_ERRORS => false,
-    //     ]);
-    //     $data = json_decode($response->getBody()->getContents(), true);
+            return $response->getBody();
+        } catch (\GuzzleHttp\Exception\BadResponseException $e){
+            if ($e->getCode() == 400){
+                return response()->json('Invalid Request. Please enter a username or a password.', $e->getCode());
+            } else if ($e->getCode() == 401) {
+                return response()->json('Your credentials are incorrect. Please try again.', $e->getCode());
+            }
+            return response()->json('Something went wrong one the server.', $e->getCode());
+        }
 
-    //     if ($response->getStatusCode() === HttpResponse::HTTP_OK) {
-    //         $accessToken = Arr::get($data, 'access_token');
-    //         $expiresIn = Arr::get($data, 'expires_in');
-    //         $refreshToken = Arr::get($data, 'refresh_token');
+        // $data = json_decode($response->getBody()->getContents(), true);
 
-    //         return [
-    //             'hej'
-    //         ];
+        // if ($response->getStatusCode() === HttpResponse::HTTP_OK) {
+        //     return [
+        //         'token_type' => 'Bearer',
+        //         'expires_in' => Arr::get($data, 'expires_in'),
+        //         'access_token' => Arr::get($data, 'access_token'),
+        //         'refresh_token' => Arr::get($data, 'refresh_token'),
+        //     ];
 
-    //     } else {
-    //         $message = Arr::get($data, 'message');
-    //         $hint = Arr::get($data, 'hint');
-
-    //         // error logic
-    //     }
-    // }
+        // } else {
+        //     return [
+        //         'error' => [
+        //             'message' => Arr::get($data, 'message'),
+        //             'hint' => Arr::get($data, 'hint'),
+        //         ],
+        //     ];
+        // }
+    }
 }

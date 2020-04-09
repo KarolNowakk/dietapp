@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Http\Resources\Recipe as RecipeResource;
 use Coderello\SocialGrant\Resolvers\SocialUserResolverInterface;
 use Illuminate\Support\ServiceProvider;
+use App\Resolvers\SocialUserResolver;
 
 class AppServiceProvider extends ServiceProvider
 {
