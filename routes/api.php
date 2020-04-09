@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,13 +18,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/login','AuthController@login');
-Route::middleware('auth:api')->post('/logout','AuthController@logout');
-Route::post('/register','AuthController@register');
+Route::post('/login', 'AuthController@login');
+Route::middleware('auth:api')->post('/logout', 'AuthController@logout');
+Route::post('/register', 'AuthController@register');
 
-Route::group(['middleware' => ['auth:api']],function(){
+Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/products', 'ProductController@index');
-    Route::get('/product/{product}', 'ProductController@show');
+
     Route::match(['post', 'put'], '/product/{product?}', 'ProductController@store');
     Route::delete('/product/{product}', 'ProductController@destroy');
 
@@ -40,8 +39,7 @@ Route::group(['middleware' => ['auth:api']],function(){
     Route::post('/user/generate', 'UserController@generate');
 
     Route::get('/meals/{date}', 'MealController@index');
-    Route::get('/meal/{date}', 'MealController@show');
+    Route::get('/meal/{date}/{number}', 'MealController@show');
 });
 
-
-
+Route::get('/product/{product}', 'ProductController@show');

@@ -50,6 +50,8 @@ class ProductController extends Controller
 
         if ($prod) {
             return new ProductResource($prod);
+        } else {
+            return response()->json("It didn't happend, sorry", 401);
         }
     }
 
