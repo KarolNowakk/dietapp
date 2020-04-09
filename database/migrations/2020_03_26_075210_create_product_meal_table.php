@@ -16,18 +16,21 @@ class CreateProductMealTable extends Migration
         Schema::create('product_meal', function (Blueprint $table) {
             $table->unsignedBigInteger('meal_id');
             $table->unsignedBigInteger('product_id');
-            $table->integer('amount');
+            $table->integer('amount')->nullable();
+            $table->boolean('not_include')->default('false');
             $table->timestamps();
 
             $table->foreign('meal_id')
                 ->references('id')
                 ->on('meals')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
 
             $table->foreign('product_id')
                 ->references('id')
                 ->on('products')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
 
             $table->primary(['meal_id', 'product_id']);
         });
