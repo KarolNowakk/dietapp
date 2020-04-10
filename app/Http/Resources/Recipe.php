@@ -10,9 +10,9 @@ class Recipe extends JsonResource
      * Transform the resource into an array.
      *
      * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
-
     public function toArray($request)
     {
         return [
@@ -22,7 +22,7 @@ class Recipe extends JsonResource
             'spices' => $this->spices,
             'steps' => $this->steps,
             'nutritions' => $this->nutritions,
-            'ingredients' => $this->ingredients_data,
+            'ingredients' => $this->ingredients,
         ];
     }
 }

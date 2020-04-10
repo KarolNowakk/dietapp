@@ -10,11 +10,14 @@ class Meal extends JsonResource
      * Transform the resource into an array.
      *
      * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
     {
         return [
+            'recipe' => $this->getThings(), // This is just for now
+            'id' => $this->id,
             'type' => $this->recipe->type->name,
             'name' => $this->recipe->name,
             'meal_date' => $this->meal_date,

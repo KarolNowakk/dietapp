@@ -12,4 +12,9 @@ class Product extends Model
     {
         $this->belongsToMany(App\Recipe::class);
     }
+
+    public function meal()
+    {
+        $this->belongsToMany(App\Product::class);
+    }
 }

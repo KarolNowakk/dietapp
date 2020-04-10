@@ -15,6 +15,7 @@ class DietHelperService
         $recipeKcal = $recipe->nutritions->get('kcal');
         $usersSettings = UserSettings::where('user_id', Auth::id())->first();
         $usersRequiredKcalPerMeal = $usersSettings->required_kcal / $usersSettings->meals_per_day;
+
         return $usersRequiredKcalPerMeal / $recipeKcal;
     }
 
@@ -25,6 +26,7 @@ class DietHelperService
     {
         // This function can be written smoothly I suppose
         $id = Recipe::where('is_private', false)->inRandomOrder()->limit(1)->get()[0]->id;
+
         return Recipe::findOrFail($id);
     }
 
@@ -32,16 +34,17 @@ class DietHelperService
     {
         $recentDayOfDiet = Meal::where('user_id', Auth::id())->orderBy('meal_date', 'desc')->first();
         $mealsPerDay = self::getMealsPerDay();
-        if (!$recentDayOfDiet ) { // OR $recentDayOfDiet->meal_number == $mealsPerDay
+        if (!$recentDayOfDiet) { // OR $recentDayOfDiet->meal_number == $mealsPerDay
             return Carbon::today()->addDays($daysToAdd)->format('Y-m-d');
-        } else {
-            return Carbon::create($recentDayOfDiet->meal_date)->addDays(1)->format('Y-m-d');
         }
+
+        return Carbon::create($recentDayOfDiet->meal_date)->addDays(1)->format('Y-m-d');
     }
 
     public static function getMealsPerDay()
     {
         $usersSettings = UserSettings::where('user_id', Auth::id())->first();
+
         return $usersSettings->meals_per_day;
     }
 
@@ -51,12 +54,12 @@ class DietHelperService
         $start = '08:00';
         $end = '21:00';
         $start = Carbon::create($start);
-        $currentMeal -= 1;
-        if ($currentMeal == 0) {
+        --$currentMeal;
+        if (0 == $currentMeal) {
             return $start->format('H:i');
-        } else {
-            $diffrence = round((strtotime($end) - strtotime($start)) / 60 / ($meals_per_day - 1) * $currentMeal, -1);
-            return $start->addMinutes($diffrence)->format('H:i');
         }
+        $diffrence = round((strtotime($end) - strtotime($start)) / 60 / ($meals_per_day - 1) * $currentMeal, -1);
+
+        return $start->addMinutes($diffrence)->format('H:i');
     }
 }

@@ -39,6 +39,7 @@ class MealController extends Controller
     {
         $meal = Meal::where('user_id', Auth::id())->where('meal_date', $date)->where('meal_number', $number)->first();
 
+        //return $meal->ingredients;
         if ($meal) {
             return new MealResource($meal);
         }

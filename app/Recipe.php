@@ -8,7 +8,7 @@ class Recipe extends Model
 {
     protected $fillable = ['id', 'name', 'spices', 'steps', 'type_id', 'is_private', 'user_id'];
 
-    public function ingredients()
+    public function products()
     {
         return $this->belongsToMany(Product::class)->withPivot('amount');
     }
@@ -20,7 +20,7 @@ class Recipe extends Model
 
     public function recipe()
     {
-        return $this->hasOne(Meal::class);
+        return $this->hasMany(Meal::class);
     }
 
     public function getNutritionsAttribute()
@@ -31,10 +31,10 @@ class Recipe extends Model
         $fats = 0;
 
         foreach ($this->ingredients as $ingredient) {
-            $kcal += $ingredient->kcal * $ingredient->pivot->amount / 10;
-            $proteins += $ingredient->proteins * $ingredient->pivot->amount / 10;
-            $carbs += $ingredient->carbs * $ingredient->pivot->amount / 10;
-            $fats += $ingredient->fats * $ingredient->pivot->amount / 10;
+            $kcal += $ingredient->kcal * $ingredient->pivot->amount / 100;
+            $proteins += $ingredient->proteins * $ingredient->pivot->amount / 100;
+            $carbs += $ingredient->carbs * $ingredient->pivot->amount / 100;
+            $fats += $ingredient->fats * $ingredient->pivot->amount / 100;
         }
 
         return collect([
@@ -45,7 +45,7 @@ class Recipe extends Model
         ]);
     }
 
-    public function getIngredientsDataAttribute()
+    public function getIngredientsAttribute()
     {
         $data = collect();
 
@@ -53,7 +53,7 @@ class Recipe extends Model
             // TODO: Handle case when product doesn't exist
             $data->push([
                 'product_id' => $ingredient->id,
-                'amount' => round($ingredient->pivot->amount * 10, 1),
+                'amount' => round($ingredient->pivot->amount, 2),
                 'name' => $ingredient->name,
             ]);
         });
