@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::get('/meals/{date}', 'MealController@index');
     Route::get('/meal/{date}/{number}', 'MealController@show');
+    Route::put('/meal/{meal}', 'MealController@store');
 });
 
 Route::get('/product/{product}', 'ProductController@show');

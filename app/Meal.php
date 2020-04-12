@@ -8,6 +8,11 @@ class Meal extends Model
 {
     protected $fillable = ['user_id', 'recipe_id', 'meal_date', 'meal_number', 'meal_hour', 'factor'];
 
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
+
     public function getNutritionsAttribute()
     {
         $kcal = 0;
@@ -38,7 +43,7 @@ class Meal extends Model
             return [
                 'product_id' => $item['pivot']['product_id'],
                 'name' => $item['name'],
-                'amount' => $item['pivot']['amount'],
+                'amount' => round($item['pivot']['amount'], 0),
             ];
         });
     }
@@ -50,21 +55,19 @@ class Meal extends Model
 
     public function getAllProducts()
     {
-        $notDeletedProducts = $this->getThings();
+        $notDeletedProducts = $this->getProductsNotDeletedFromRecipe();
         $addedProducts = $this->getProductsAddedToRecipe();
 
         return $notDeletedProducts->merge($addedProducts);
     }
 
-    public function getThings()
+    public function getProductsNotDeletedFromRecipe()
     {
-        $productsNotIncluded = collect($this->products)->map(function ($item) {
-            if (true == $item->pivot->not_include) {
-                return $item->id;
-            }
-        })->toArray();
+        $productsNotIncluded = $this->products->filter(function ($item) {
+            return $item->pivot->not_include;
+        })->pluck('id')->toArray();
 
-        return collect($this->recipe->products)->transform(function ($item) use ($productsNotIncluded) {
+        return $this->recipe->products->map(function ($item) use ($productsNotIncluded) {
             if (!in_array($item['id'], $productsNotIncluded)) {
                 $item['pivot']['amount'] *= $this->factor;
 
@@ -73,36 +76,7 @@ class Meal extends Model
         })->filter()->flatten(1);
     }
 
-    // public function getProductsNotDeletedFromRecipe()
-    // {
-    //     $this->loadMissing('recipe.products');
-    //     $productsNotIncluded = collect($this->products)->map(function ($item) {
-    //         if (true == $item->pivot->not_include) {
-    //             return $item->id;
-    //         }
-    //     })->toArray();
-
-    //     return collect($this->recipe->products)->transform(function ($item) use ($productsNotIncluded) {
-    //         if (!in_array($item['id'], $productsNotIncluded)) {
-    //             return $item;
-    //         }
-    //     })->filter()->flatten(1);
-
-    //     // $notDeletedProducts = collect($this->recipe->ingredients)->filter(function ($item) use ($productsNotIncluded) {
-    //     //     return !in_array($item['id'], $productsNotIncluded);
-    //     // })->flatten(1);
-    //     // $amount = $notDeletedProducts[1]['pivot']['amount'];
-    //     // foreach ($notDeletedProducts as $item) {
-    //     //     $item['pivot']['amount'] = $amount * $this->factor;
-    //     // }
-
-    //     // return $notDeletedProducts;
-    //     // // return $notDeletedProducts->transform(function ($item) {
-    //     // //     return $item['pivot']['amount'] * $this->factor;
-    //     // // });
-    // }
-
-    protected function products()
+    public function products()
     {
         return $this->belongsToMany(Product::class, 'product_meal')->withPivot('not_include', 'amount');
     }

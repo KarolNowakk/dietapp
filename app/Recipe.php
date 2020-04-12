@@ -30,7 +30,7 @@ class Recipe extends Model
         $carbs = 0;
         $fats = 0;
 
-        foreach ($this->ingredients as $ingredient) {
+        foreach ($this->products as $ingredient) {
             $kcal += $ingredient->kcal * $ingredient->pivot->amount / 100;
             $proteins += $ingredient->proteins * $ingredient->pivot->amount / 100;
             $carbs += $ingredient->carbs * $ingredient->pivot->amount / 100;
@@ -48,8 +48,7 @@ class Recipe extends Model
     public function getIngredientsAttribute()
     {
         $data = collect();
-
-        $this->ingredients->each(function ($ingredient) use ($data) {
+        $this->products->each(function ($ingredient) use ($data) {
             // TODO: Handle case when product doesn't exist
             $data->push([
                 'product_id' => $ingredient->id,

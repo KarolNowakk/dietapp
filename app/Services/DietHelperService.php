@@ -4,22 +4,28 @@ namespace App\Services;
 
 use App\Meal;
 use App\Recipe;
-use App\UserSettings;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class DietHelperService
 {
+    /**
+     * Returns meal factor for kcal.
+     *
+     * @return float
+     */
     public static function getMealKcalFactor(Recipe $recipe)
     {
         $recipeKcal = $recipe->nutritions->get('kcal');
-        $usersSettings = UserSettings::where('user_id', Auth::id())->first();
+        $usersSettings = Auth::user()->settings;
         $usersRequiredKcalPerMeal = $usersSettings->required_kcal / $usersSettings->meals_per_day;
 
         return $usersRequiredKcalPerMeal / $recipeKcal;
     }
 
     /**
+     * Returns random recipe.
+     *
      * @return Recipe
      */
     public static function getRandomNonPrivateRecipe()
@@ -30,36 +36,46 @@ class DietHelperService
         return Recipe::findOrFail($id);
     }
 
+    /**
+     * Returns date of next meal.
+     *
+     * @param int $daysToAdd
+     *
+     * @return Carbon
+     */
     public static function getDayDateOfMeal($daysToAdd = 1)
     {
         $recentDayOfDiet = Meal::where('user_id', Auth::id())->orderBy('meal_date', 'desc')->first();
-        $mealsPerDay = self::getMealsPerDay();
-        if (!$recentDayOfDiet) { // OR $recentDayOfDiet->meal_number == $mealsPerDay
+        if (!$recentDayOfDiet) {
             return Carbon::today()->addDays($daysToAdd)->format('Y-m-d');
         }
 
         return Carbon::create($recentDayOfDiet->meal_date)->addDays(1)->format('Y-m-d');
     }
 
-    public static function getMealsPerDay()
+    /**
+     * Returns hour of passed meal.
+     *
+     * @param int   $meals_per_day, $currentMeal
+     * @param mixed $currentMeal
+     * @param mixed $start
+     * @param mixed $end
+     *
+     * @return Carbon
+     */
+    public static function getMealHour($meals_per_day, $start, $end)
     {
-        $usersSettings = UserSettings::where('user_id', Auth::id())->first();
-
-        return $usersSettings->meals_per_day;
-    }
-
-    public static function getMealHour($meals_per_day, $currentMeal)
-    {
-        // TODO: add start, end columns to user_settings table
-        $start = '08:00';
-        $end = '21:00';
         $start = Carbon::create($start);
-        --$currentMeal;
-        if (0 == $currentMeal) {
-            return $start->format('H:i');
+        $hours = collect();
+        for ($i = 0; $i < $meals_per_day; ++$i) {
+            if ($i == 0) {
+                $hours->push($start->format('H:i'));
+            } else {
+                $diffrence = round((strtotime($end) - strtotime($start)) / 60 / ($meals_per_day - 1) * $i, -1);
+                $hours->push($start->addMinutes($diffrence)->format('H:i'));
+            }
         }
-        $diffrence = round((strtotime($end) - strtotime($start)) / 60 / ($meals_per_day - 1) * $currentMeal, -1);
 
-        return $start->addMinutes($diffrence)->format('H:i');
+        return $hours;
     }
 }

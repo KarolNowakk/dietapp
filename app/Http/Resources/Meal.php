@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Meal as MealModel;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Meal extends JsonResource
@@ -16,7 +17,6 @@ class Meal extends JsonResource
     public function toArray($request)
     {
         return [
-            'recipe' => $this->getThings(), // This is just for now
             'id' => $this->id,
             'type' => $this->recipe->type->name,
             'name' => $this->recipe->name,
@@ -25,7 +25,7 @@ class Meal extends JsonResource
             'meal_hour' => $this->meal_hour,
             'spices' => $this->recipe->spices,
             'steps' => $this->recipe->steps,
-            'nutritions' => $this->nutritions,
+            'nutritions' => MealModel::find($this->id)->nutritions,
             'ingredients' => $this->ingredients,
         ];
     }
