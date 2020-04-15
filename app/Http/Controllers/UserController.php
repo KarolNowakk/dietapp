@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\DietService;
 use App\UserSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,45 +57,5 @@ class UserController extends Controller
         if ($settings) {
             return response()->json($settings, 200);
         }
-    }
-
-    public function generate(Request $request)
-    {
-        $data = $request->validate([
-            'generateDays' => ['numeric', 'between:1,14', 'required'],
-        ]);
-        $diet = new DietService();
-        $newDiet = $diet->generateDays($data['generateDays']);
-        if ($newDiet) {
-            return $newDiet;
-        }
-    }
-
-    public function showSubstances()
-    {
-        return Auth::user()->notWantedSubstances->pluck('name');
-    }
-
-    public function getShoppingList($from, $to)
-    {
-        $meals = Auth::user()->meals->whereBetween('meal_date', [$from, $to]);
-
-        $shoppingList = collect();
-
-        $meals->each(function ($meal) use ($shoppingList) {
-            $meal->ingredients->each(function ($ingredient) use ($shoppingList) {
-                if (!$shoppingList->contains('name', $ingredient['name'])) {
-                    $shoppingList->push($ingredient);
-                } else {
-                    $shoppingList->each(function ($item) use ($ingredient) {
-                        if ($item['name'] === $ingredient['name']) {
-                            $item['amount'] += $ingredient['amount'];
-                        }
-                    });
-                }
-            });
-        });
-
-        return $shoppingList;
     }
 }

@@ -17,9 +17,17 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        $recipes = Recipe::paginate(8);
+        $phrase = $request->validate([
+            'phrase' => 'string',
+        ]);
+        $phrase = $phrase['phrase'];
+        $products = Recipe::where('name', 'like', "%{$phrase}%")->paginate(10); //where('name', 'like', "%{$q}%")->paginate(10);
 
-        return RecipeResource::collection($recipes);
+        if (!$products) {
+            return response()->json('No recipe found', 404);
+        }
+
+        return RecipeResource::collection($products);
     }
 
     /**

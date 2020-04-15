@@ -16,7 +16,15 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $phrase = $request->validate([
+            'phrase' => 'string',
+        ]);
+        $phrase = $phrase['phrase'];
+        $products = Product::where('name', 'like', "%{$phrase}%")->paginate(10); //where('name', 'like', "%{$q}%")->paginate(10);
+
+        if (!$products) {
+            return response()->json('No product found', 404);
+        }
 
         return ProductResource::collection($products);
     }
