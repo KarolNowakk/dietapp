@@ -42,9 +42,9 @@ class RecipeController extends Controller
     public function store(Request $request, $recipe = null)
     {
         $data = $request->validate([
-            'name' => ['string', 'max:255', 'required'],
-            'spices' => ['string', 'required'],
-            'steps' => ['required', 'nullable'],
+            'name' => ['string', 'max:255'],
+            'spices' => ['string'],
+            'steps' => ['nullable'],
             'type_id' => 'numeric',
             'is_private' => 'boolean',
             'ingredients.*.amount' => ['numeric', 'between:0,1000', 'required'],
@@ -55,6 +55,10 @@ class RecipeController extends Controller
             $data['user_id'] = Auth::id();
         } else {
             $data['user_id'] = 1;
+        }
+
+        if (!array_key_exists('name', $data)) {
+            $data['name'] = 'Default Recipe Name';
         }
 
         $newRecipe = Recipe::updateOrCreate(['id' => $recipe], $data);
@@ -78,6 +82,21 @@ class RecipeController extends Controller
         if ($recipe->delete()) {
             return new RecipeResource($recipe);
         }
+    }
+
+    public function search(Request $request)
+    {
+        $phrase = $request->validate([
+            'phrase' => 'string',
+        ]);
+        $phrase = $phrase['phrase'];
+        $products = Recipe::where('name', 'like', "%{$phrase}%")->paginate(10); //where('name', 'like', "%{$q}%")->paginate(10);
+
+        if (!$products) {
+            return response()->json('No recipe found', 404);
+        }
+
+        return RecipeResource::collection($products);
     }
 
     /**

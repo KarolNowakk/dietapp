@@ -38,10 +38,10 @@ class Recipe extends Model
         }
 
         return collect([
-            'kcal' => round($kcal, 0),
-            'proteins' => round($proteins, 0),
-            'carbs' => round($carbs, 0),
-            'fats' => round($fats, 0),
+            'kcal' => $kcal,
+            'proteins' => $proteins,
+            'carbs' => $carbs,
+            'fats' => $fats,
         ]);
     }
 
@@ -58,5 +58,12 @@ class Recipe extends Model
         });
 
         return $data->toArray();
+    }
+
+    public function getSubstancesAttribute()
+    {
+        return $this->products->map(function ($product) {
+            return $product->substances;
+        })->flatten(1)->pluck('name')->unique();
     }
 }

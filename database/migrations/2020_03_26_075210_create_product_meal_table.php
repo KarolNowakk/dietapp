@@ -15,8 +15,7 @@ class CreateProductMealTable extends Migration
             $table->unsignedBigInteger('meal_id');
             $table->unsignedBigInteger('product_id');
             $table->integer('amount')->nullable();
-            $table->boolean('not_include')->default('false');
-            $table->timestamps();
+            $table->boolean('not_include')->default(0);
 
             $table->foreign('meal_id')
                 ->references('id')

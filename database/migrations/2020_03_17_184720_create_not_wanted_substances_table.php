@@ -8,35 +8,31 @@ class CreateNotWantedSubstancesTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
         Schema::create('not_wanted_substances', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('substance_id');
-            $table->timestamps();
 
             $table->foreign('substance_id')
                 ->references('id')
                 ->on('substances')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
 
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
 
             $table->primary(['substance_id', 'user_id']);
-
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {

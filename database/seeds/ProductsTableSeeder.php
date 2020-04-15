@@ -6,11 +6,13 @@ class ProductsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run()
     {
         factory(App\Product::class, 100)->create();
+
+        App\Product::all()->each(function ($product) {
+            $product->substances()->attach(random_int(1, 7));
+        });
     }
 }

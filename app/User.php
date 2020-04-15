@@ -47,4 +47,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserSettings::class);
     }
+
+    public function notWantedSubstances()
+    {
+        return $this->belongsToMany(Substance::class, 'not_wanted_substances');
+    }
 }

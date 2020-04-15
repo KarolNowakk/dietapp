@@ -12,13 +12,17 @@ class DietHelperService
     /**
      * Returns meal factor for kcal.
      *
+     * @param mixed $usersRequiredKcalPerMeal
+     *
      * @return float
      */
-    public static function getMealKcalFactor(Recipe $recipe)
+    public static function getMealKcalFactor(Recipe $recipe, $usersRequiredKcalPerMeal = null)
     {
         $recipeKcal = $recipe->nutritions->get('kcal');
-        $usersSettings = Auth::user()->settings;
-        $usersRequiredKcalPerMeal = $usersSettings->required_kcal / $usersSettings->meals_per_day;
+        if (!isset($usersRequiredKcalPerMeal)) {
+            $usersSettings = Auth::user()->settings;
+            $usersRequiredKcalPerMeal = $usersSettings->required_kcal / $usersSettings->meals_per_day;
+        }
 
         return $usersRequiredKcalPerMeal / $recipeKcal;
     }

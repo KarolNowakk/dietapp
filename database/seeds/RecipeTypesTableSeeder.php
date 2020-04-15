@@ -6,11 +6,12 @@ class RecipeTypesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run()
     {
-        factory(App\RecipeType::class, 5)->create();
+        App\RecipeType::create(['name' => 'breakfast']);
+        App\RecipeType::create(['name' => 'smoothie']);
+        App\RecipeType::create(['name' => 'bar']);
+        App\RecipeType::create(['name' => 'dinner']);
     }
 }

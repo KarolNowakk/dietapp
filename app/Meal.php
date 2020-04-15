@@ -67,6 +67,10 @@ class Meal extends Model
             return $item->pivot->not_include;
         })->pluck('id')->toArray();
 
+        if (!isset($this->recipe)) {
+            return collect();
+        }
+
         return $this->recipe->products->map(function ($item) use ($productsNotIncluded) {
             if (!in_array($item['id'], $productsNotIncluded)) {
                 $item['pivot']['amount'] *= $this->factor;

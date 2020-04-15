@@ -10,11 +10,16 @@ class Product extends Model
 
     public function recipes()
     {
-        $this->belongsToMany(App\Recipe::class);
+        return $this->belongsToMany(App\Recipe::class);
     }
 
-    public function meal()
+    public function meals()
     {
-        $this->belongsToMany(App\Product::class);
+        return $this->belongsToMany(App\Product::class);
+    }
+
+    public function substances()
+    {
+        return $this->belongsToMany(Substance::class, 'product_substance');
     }
 }

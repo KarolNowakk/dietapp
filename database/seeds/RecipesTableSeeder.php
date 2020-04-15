@@ -6,19 +6,17 @@ class RecipesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run()
     {
         factory(App\Recipe::class, 30)->create();
 
-        App\Recipe::all()->each(function($recipe){
+        App\Recipe::all()->each(function ($recipe) {
             $data = $this->generateRandomProductIds();
-            $recipe->ingredients()->attach($data['products'], ['amount' => 2]);
+            $recipe->products()->attach($data['products'], ['amount' => 2]);
 
-            $recipe->ingredients()->each(function($attribute) use ($recipe) {
-                $recipe->ingredients()->updateExistingPivot($attribute, ['amount' => $this->randomFloat(0, 10, 2)]);
+            $recipe->products()->each(function ($attribute) use ($recipe) {
+                $recipe->products()->updateExistingPivot($attribute, ['amount' => $this->randomFloat(0, 10, 2)]);
             });
         });
     }
@@ -28,8 +26,9 @@ class RecipesTableSeeder extends Seeder
         $products = [];
 
         for ($i = 0; $i < random_int(3, 8); ++$i) {
-             array_push($products, random_int(1, 100));
+            array_push($products, random_int(1, 100));
         }
+
         return [
             'products' => array_unique($products),
         ];
@@ -37,9 +36,6 @@ class RecipesTableSeeder extends Seeder
 
     protected function randomFloat($min, $max, $round)
     {
-        return round($min + mt_rand() / mt_getrandmax() * ($max - $min),$round);
+        return round($min + mt_rand() / mt_getrandmax() * ($max - $min), $round);
     }
-
-
-
 }

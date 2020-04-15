@@ -8,35 +8,31 @@ class CreateNotWantedRecipesTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
         Schema::create('not_wanted_recipes', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('recipe_id');
-            $table->timestamps();
 
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
 
             $table->foreign('recipe_id')
                 ->references('id')
                 ->on('recipes')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
 
             $table->primary(['recipe_id', 'user_id']);
-
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {

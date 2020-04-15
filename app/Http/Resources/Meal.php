@@ -18,13 +18,36 @@ class Meal extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => $this->recipe->type->name,
-            'name' => $this->recipe->name,
+
+            'recipe_id' => $this->when(isset($this->recipe->id), function () {
+                if (isset($this->recipe->id)) {
+                    return $this->recipe->id;
+                }
+            }),
+            'type' => $this->when(isset($this->recipe->type), function () {
+                if (isset($this->recipe->type)) {
+                    return $this->recipe->type->name;
+                }
+            }),
+            'name' => $this->when(isset($this->recipe->name), function () {
+                if (isset($this->recipe->name)) {
+                    return $this->recipe->name;
+                }
+            }),
+            'spices' => $this->when(isset($this->recipe->spices), function () {
+                if (isset($this->recipe->spices)) {
+                    return $this->recipe->spices;
+                }
+            }),
+            'steps' => $this->when(isset($this->recipe->steps), function () {
+                if (isset($this->recipe->steps)) {
+                    return $this->recipe->steps;
+                }
+            }),
+
             'meal_date' => $this->meal_date,
             'meal_number' => $this->meal_number,
             'meal_hour' => $this->meal_hour,
-            'spices' => $this->recipe->spices,
-            'steps' => $this->recipe->steps,
             'nutritions' => MealModel::find($this->id)->nutritions,
             'ingredients' => $this->ingredients,
         ];
