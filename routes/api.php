@@ -23,15 +23,10 @@ Route::middleware('auth:api')->post('/logout', 'AuthController@logout');
 Route::post('/register', 'AuthController@register');
 
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::post('/products', 'ProductController@index');
-    Route::match(['post', 'put'], '/product/{product?}', 'ProductController@store');
-    Route::delete('/product/{product}', 'ProductController@destroy');
-    Route::get('/product/{product}', 'ProductController@show');
-
-    Route::get('/recipes', 'RecipeController@index');
+    Route::post('/recipe/search', 'RecipeController@index');
     Route::match(['post', 'put'], '/recipe/{recipe?}', 'RecipeController@store');
     Route::delete('/recipe/{recipe}', 'RecipeController@destroy');
-    Route::post('/recipe', 'RecipeController@show');
+    Route::get('/recipe', 'RecipeController@show');
 
     Route::match(['post', 'put'], '/user', 'UserController@store');
     Route::get('/user', 'UserController@show');
@@ -48,3 +43,10 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('/meal/{meal}', 'MealController@update');
     Route::post('/meal', 'MealController@store');
 });
+
+Route::post('/product/search', 'ProductController@index');
+Route::match(['post', 'put'], '/product/{product?}', 'ProductController@store');
+Route::delete('/product/{product}', 'ProductController@destroy');
+Route::get('/product/{product}', 'ProductController@show');
+
+$table = [1, 1, 2];

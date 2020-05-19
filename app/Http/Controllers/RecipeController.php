@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\Recipe as RecipeResource;
 use App\Product;
 use App\Recipe;
+use App\Services\RecipeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +16,7 @@ class RecipeController extends Controller
      *
      * @return RecipeResource
      */
-    public function index()
+    public function index(Request $request)
     {
         $phrase = $request->validate([
             'phrase' => 'string',
@@ -64,9 +65,9 @@ class RecipeController extends Controller
         } else {
             $data['user_id'] = 1;
         }
-
+  
         if (!array_key_exists('name', $data)) {
-            $data['name'] = 'Default Recipe Name';
+            $data['name'] = RecipeService::createName($data['ingredients']);
         }
 
         $newRecipe = Recipe::updateOrCreate(['id' => $recipe], $data);
@@ -81,8 +82,6 @@ class RecipeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @throws \Exception
-     *
      * @return RecipeResource
      */
     public function destroy(Recipe $recipe)
@@ -92,24 +91,10 @@ class RecipeController extends Controller
         }
     }
 
-    public function search(Request $request)
-    {
-        $phrase = $request->validate([
-            'phrase' => 'string',
-        ]);
-        $phrase = $phrase['phrase'];
-        $products = Recipe::where('name', 'like', "%{$phrase}%")->paginate(10); //where('name', 'like', "%{$q}%")->paginate(10);
-
-        if (!$products) {
-            return response()->json('No recipe found', 404);
-        }
-
-        return RecipeResource::collection($products);
-    }
-
     /**
      * Attach recipe to products.
      *
+     * @param Recipe $recipe,
      * @param array $data
      *
      * @return void

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Meal as MealResource;
+use App\Services\DietHelperService;
+use App\Services\DietService;
 use Illuminate\Http\Request;
 
 class DietController extends Controller

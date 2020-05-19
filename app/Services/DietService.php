@@ -29,7 +29,7 @@ class DietService
         $dayDate = DietHelperService::getDayDateOfMeal();
         $mealsPerDay = $this->userSettings->meals_per_day;
         $meals = collect();
-        $meals_hours = DietHelperService::getMealHour($mealsPerDay, $this->userSettings->start, $this->userSettings->end);
+        $meals_hours = DietHelperService::getMealHours($mealsPerDay, $this->userSettings->start, $this->userSettings->end);
         for ($i = 1; $i <= $mealsPerDay; ++$i) {
             $newMeal = Meal::create($this->generateOneMeal($i, $dayDate, $meals_hours[$i - 1]));
             if ($newMeal) {

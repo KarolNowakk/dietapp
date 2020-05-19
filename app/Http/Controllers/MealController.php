@@ -22,7 +22,7 @@ class MealController extends Controller
      */
     public function index($date)
     {
-        $meals = Auth::user()->meals()->where('meal_date', $date)->get();
+        $meals = Auth::user()->meals->where('meal_date', $date)->get();
 
         if (blank($meals)) {
             throw new MealNotFoundException('Meals with passed date not found.');
@@ -41,9 +41,8 @@ class MealController extends Controller
      */
     public function show($date, $number)
     {
-        $meal = Auth::user()->meals()->where('meal_date', $date)->where('meal_number', $number)->first();
+        $meal = Auth::user()->meals->where('meal_date', $date)->where('meal_number', $number)->first();
 
-        //return $meal->nutritions;
         if (blank($meal)) {
             throw new MealNotFoundException('Meal with passed date not found.', 1);
         }

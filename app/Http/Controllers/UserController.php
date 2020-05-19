@@ -27,18 +27,10 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'required_kcal' => ['numeric', 'between:1000,10000', Rule::requiredIf(function () use ($request) {
-                return !$request->required_proteins and !$request->required_carbs and !$request->required_fats;
-            })],
-            'required_proteins' => ['numeric', 'between:1,1000', Rule::requiredIf(function () use ($request) {
-                return !$request->required_kcal;
-            })],
-            'required_carbs' => ['numeric', 'between:1,1000', Rule::requiredIf(function () use ($request) {
-                return !$request->required_kcal;
-            })],
-            'required_fats' => ['numeric', 'between:1,1000', Rule::requiredIf(function () use ($request) {
-                return !$request->required_kcal;
-            })],
+            'required_kcal' => ['numeric', 'between:1000,8000', 'required'],
+            'required_proteins' => ['numeric', 'between:10,1000', 'required'],
+            'required_carbs' => ['numeric', 'between:10,1000', 'required'],
+            'required_fats' => ['numeric', 'between:10,1000', 'required'],
             'meals_per_day' => ['numeric', 'between:2,8', 'required'],
             'count_by' => ['string', 'in:macro,kcal', 'required'],
             'start' => ['date_format:H:i', 'before:end', 'required'],

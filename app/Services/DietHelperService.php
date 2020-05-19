@@ -34,10 +34,7 @@ class DietHelperService
      */
     public static function getRandomNonPrivateRecipe()
     {
-        // This function can be written smoothly I suppose
-        $id = Recipe::where('is_private', false)->inRandomOrder()->limit(1)->get()[0]->id;
-
-        return Recipe::findOrFail($id);
+        return Recipe::where('is_private', false)->inRandomOrder()->limit(1)->first();
     }
 
     /**
@@ -67,7 +64,7 @@ class DietHelperService
      *
      * @return Carbon
      */
-    public static function getMealHour($meals_per_day, $start, $end)
+    public static function getMealHours($meals_per_day, $start, $end)
     {
         $start = Carbon::create($start);
         $hours = collect();
